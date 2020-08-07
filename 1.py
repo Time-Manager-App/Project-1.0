@@ -1,3 +1,5 @@
+import pandas
+import numpy
 class Time:
     def __init__(self,hour,minute):
         self.hour = hour
@@ -19,6 +21,9 @@ class Day:
         self.starting_timing = time.timing
         self.blocklist = []
 
+    def __len__(self):
+        return len(self.blocklist)
+
     def blockappend(self,block):
         self.blocklist.append(block)
         return self
@@ -34,13 +39,29 @@ class Day:
             print(block.name,block.start_timing,block.end_timing)
             t = block.end_timing
 
-def main(block):
-    if block.form == 'a':
-        block.duration = block.duration-10
-    return block
+def main(firstday,finishday,step):
+    ind = [i for i in range(len(firstday))]
+    col = ['day'+str(j) for j in range(step+1)]
+    df = pandas.DataFrame(index=ind,columns=col)
+    df['day0'] = firstday.blocklist
+    df['day'+str(step)] = finishday.blocklist
+    print(df)
 
-d = Day(Time(7,10))
+'''
+    for i in range(len(firstday)):
+        steplen = 0
+        steplen = (finishday.blocklist[i].start_timing - firstday.blocklist[i].start_timing)/step
+        df[i]
+'''
+
+
+d1 = Day(Time(7,10))
 b1 = Block('learn',40,'a')
 b2 = Block('game',30,'b')
-d = d.blockappend(b1).blockappend(b2)
-d.create_schedule()
+d1 = d1.blockappend(b1).blockappend(b2)
+
+d2 = Day(Time(7,10))
+b3 = Block('learn',30,'a')
+b4 = Block('game',20,'b')
+d2 = d2.blockappend(b3).blockappend(b4)
+main(d1,d2,5)
